@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_external_users_hid_idx" author="maxim.baranov@russianpost.ru"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="external_users_hid_idx"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS external_users_hid_idx
+            ON external_users(hid DESC NULLS LAST);
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_external_users_ext_system_id_idx" author="maxim.baranov@russianpost.ru"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="external_users_ext_system_id_idx"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS external_users_ext_system_id_idx
+            ON external_users(ext_system_id DESC NULLS LAST);
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_external_users_ext_user_id_idx" author="maxim.baranov@russianpost.ru"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="external_users_ext_user_id_idx"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS external_users_ext_user_id_idx
+            ON external_users(ext_user_id DESC NULLS LAST);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

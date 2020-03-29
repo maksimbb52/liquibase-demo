@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_sequence_external_users_id_seq" author="maxim.baranov@russianpost.ru"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="external_users_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="external_users_id_seq"/>
+    </changeSet>
+
+    <changeSet id="create_table_external_users" author="maxim.baranov@russianpost.ru" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="external_users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="external_users"
+                     remarks="Пользователи внешних систем.">
+            <column name="id" type="int" defaultValueSequenceNext="external_users_id_seq"
+                    remarks="Идентификатор">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="external_users_pk"/>
+            </column>
+            <column name="ext_user_id" type="varchar(255)" remarks="Идентификатор пользователя во внешней системе.">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ext_system_id" type="int" remarks="Идентификатор внешней системы.">
+                <constraints nullable="false" foreignKeyName="external_users_ext_system_id_fk"
+                             referencedTableName="external_systems" referencedColumnNames="id"/>
+            </column>
+            <column name="hid" type="varchar(63)" remarks="Идентификатор пользователя в почтовой системе.">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
